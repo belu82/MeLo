@@ -131,5 +131,22 @@ namespace MeLo.Core
 
             return reader;
         }
+
+        public void Delete(string commandText, CommandType commandType, SqlParameter[] parameters = null)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand(commandText, connection))
+                {
+                    command.CommandType = commandType;
+                    if (parameters != null)
+                        foreach (var paramter in parameters)
+                            command.Parameters.Add(paramter);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

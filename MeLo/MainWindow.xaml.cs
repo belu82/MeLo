@@ -31,10 +31,12 @@ namespace MeLo
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         ObservableCollection<Directory> myDirectories;
 
+        DirectoryDAL directoryService;
+
         public MainWindow()
         {
             InitializeComponent();
-            DirectoryDAL directoryService = new DirectoryDAL();
+            directoryService = new DirectoryDAL();
             myDirectories = new ObservableCollection<Directory>(directoryService.GetAll());
             this.directories.ItemsSource = myDirectories;
 
@@ -64,6 +66,7 @@ namespace MeLo
                     var directoryDal = new DirectoryDAL();
                     Directory directory = new Directory
                     {
+
                         name = name,
                         path = path
                     };
@@ -80,5 +83,19 @@ namespace MeLo
                 }
             }
         }
+
+        private void DeleteDirectoryClick(object sender, RoutedEventArgs e)
+        {
+            Button b = sender as Button;
+
+            Directory directory = b.CommandParameter as Directory;
+
+            directoryService.Delete(directory.id);
+            myDirectories = new ObservableCollection<Directory>(directoryService.GetAll());
+            this.directories.ItemsSource = myDirectories;
+
+        }
+
+
     }
 }

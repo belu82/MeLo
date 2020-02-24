@@ -35,6 +35,7 @@ namespace MeLo.Core
                     var dir = new Directory();
                     dir.name = dataReader["Name"].ToString();
                     dir.path = dataReader["Path"].ToString();
+                    dir.id = (int)(dataReader["id"]);
 
                     directories.Add(dir);
 
@@ -51,6 +52,13 @@ namespace MeLo.Core
                 CloseConnection();
             }
 
+        }
+
+        public void Delete(int id)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(sqlHelper.CreateParameter("@id", id, DbType.Int32));
+            sqlHelper.Delete("DAH_Directory_Delete", CommandType.StoredProcedure, parameters.ToArray());
         }
     }
 }
